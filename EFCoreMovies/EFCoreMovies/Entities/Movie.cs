@@ -33,8 +33,9 @@
 
         /// <summary>
         /// Genres hash set
+        /// List -> Si nos ayuda al ordenamiento
         /// </summary>
-        public HashSet<Genre> Genres { get; set; }
+        public List<Genre> Genres { get; set; } // HashSet no los ordena, y microsoft no nos garantiza el ordenamiento al 100%
 
         /// <summary>
         /// Cinema halls hash set

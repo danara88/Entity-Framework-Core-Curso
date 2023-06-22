@@ -1,4 +1,5 @@
 ﻿using EFCoreMovies.Data.Configurations;
+using EFCoreMovies.Data.Seeding;
 using EFCoreMovies.Entities;
 using EFCoreMovies.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -44,7 +45,7 @@ namespace EFCoreMovies.Data
             //modelBuilder.ApplyConfiguration(new GenreConfig());
 
             //modelBuilder.ApplyConfiguration(new ActorConfig());
-               
+
             //modelBuilder.ApplyConfiguration(new CinemaConfig());
 
             //modelBuilder.ApplyConfiguration(new MovieConfig());
@@ -54,6 +55,9 @@ namespace EFCoreMovies.Data
             //modelBuilder.ApplyConfiguration(new CinemaHallConfig());
 
             //modelBuilder.ApplyConfiguration(new MovieActorConfig());
+
+            // Para ejecutar la seed, tenemos que hacer una migracion
+            SeedingModuleConsult.Seed(modelBuilder);
         }
 
         // Add your tables here
