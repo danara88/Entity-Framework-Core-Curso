@@ -36,5 +36,10 @@ namespace EFCoreMovies.Entities
         /// Movies hash set
         /// </summary>
         public HashSet<Movie> Movies { get; set; }
+
+        /// <summary>
+        /// Currency symbol
+        /// </summary>
+        public Currency Currency { get; set; }
     }
 }

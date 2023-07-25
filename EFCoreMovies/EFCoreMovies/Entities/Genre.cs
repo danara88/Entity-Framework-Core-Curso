@@ -1,9 +1,12 @@
-﻿namespace EFCoreMovies.Entities
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace EFCoreMovies.Entities
 {
     /// <summary>
     /// Genre Entity
     /// </summary>
     // [Table("TableGeneros", Schema="peliculas")] Esto cambia el nombre de la tabla
+    // [Index(nameof(Name), IsUnique = true)] // Name debe ser unico
     public class Genre
     {
         /// <summary>
@@ -20,6 +23,11 @@
         // [Required]
         // [Column("NombreGenero")] Esto cambia el nombre de la columna
         public string Name { get; set; }
+
+        /// <summary>
+        /// Genre deleted status
+        /// </summary>
+        public bool IsDeleted { get; set; }
 
         /// <summary>
         /// Movies hash set

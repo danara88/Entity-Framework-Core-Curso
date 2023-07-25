@@ -1,6 +1,7 @@
 ﻿using EFCoreMovies.Data.Configurations;
 using EFCoreMovies.Data.Seeding;
 using EFCoreMovies.Entities;
+using EFCoreMovies.Entities.NotKeys;
 using EFCoreMovies.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -58,6 +59,33 @@ namespace EFCoreMovies.Data
 
             // Para ejecutar la seed, tenemos que hacer una migracion
             SeedingModuleConsult.Seed(modelBuilder);
+
+            // modelBuilder.Entity<Log>().Property(prop => prop.Id).ValueGeneratedNever();
+
+            // Ignorando la clase Direction
+            // modelBuilder.Ignore<Direction>();
+
+            modelBuilder.Entity<CinemaWithNotLocation>().ToSqlQuery("Select Id, Name from Cinemas")
+                //.HasNoKey()
+                .ToView(null); // Para que no se agregue una tabla en la bd con el esquema de CinemaWithoutLocation
+
+            // Load data from a VIEW
+            modelBuilder.Entity<MovieWithQuantities>()
+                .HasNoKey()
+                .ToView("CountMoviesView");
+
+            // Aplicando una configuracion de no unicode a las propiedades que contengan el nombre URL
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var prop in entityType.GetProperties())
+                {
+                    if(prop.ClrType == typeof(string) && prop.Name.Contains("URL", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        prop.SetIsUnicode(false);
+                        prop.SetMaxLength(500);
+                    }
+                }
+            }
         }
 
         // Add your tables here
@@ -68,5 +96,7 @@ namespace EFCoreMovies.Data
         public DbSet<CinemaOffer> CinemaOffers { get; set; }
         public DbSet<CinemaHall> CinemaHalls { get; set; }
         public DbSet<MovieActor> MoviesActors { get; set; }
+        public DbSet<Log> Logs { get; set; }
+        public DbSet<CinemaWithNotLocation> CinemaWithNotLocation { get; set; }
     }
 }

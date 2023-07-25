@@ -4,6 +4,7 @@ using EFCoreMovies.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace EFCoreMovies.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230706031735_AddDeleteGenreField")]
+    partial class AddDeleteGenreField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,11 +96,6 @@ namespace EFCoreMovies.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("PictureURL")
-                        .HasMaxLength(500)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
 
                     b.HasKey("Id");
 
@@ -212,18 +210,13 @@ namespace EFCoreMovies.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CinemaHallType")
-                        .IsRequired()
+                    b.Property<int>("CinemaHallType")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("TwoDimensions");
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int>("CinemaId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(9, 2)
@@ -239,65 +232,57 @@ namespace EFCoreMovies.Migrations
                         new
                         {
                             Id = 1,
-                            CinemaHallType = "TwoDimensions",
+                            CinemaHallType = 1,
                             CinemaId = 1,
-                            Currency = "",
                             Price = 220m
                         },
                         new
                         {
                             Id = 2,
-                            CinemaHallType = "ThreeDimensions",
+                            CinemaHallType = 2,
                             CinemaId = 1,
-                            Currency = "",
                             Price = 320m
                         },
                         new
                         {
                             Id = 3,
-                            CinemaHallType = "TwoDimensions",
+                            CinemaHallType = 1,
                             CinemaId = 2,
-                            Currency = "",
                             Price = 200m
                         },
                         new
                         {
                             Id = 4,
-                            CinemaHallType = "ThreeDimensions",
+                            CinemaHallType = 2,
                             CinemaId = 2,
-                            Currency = "",
                             Price = 290m
                         },
                         new
                         {
                             Id = 5,
-                            CinemaHallType = "TwoDimensions",
+                            CinemaHallType = 1,
                             CinemaId = 3,
-                            Currency = "",
                             Price = 250m
                         },
                         new
                         {
                             Id = 6,
-                            CinemaHallType = "ThreeDimensions",
+                            CinemaHallType = 2,
                             CinemaId = 3,
-                            Currency = "",
                             Price = 330m
                         },
                         new
                         {
                             Id = 7,
-                            CinemaHallType = "VIP",
+                            CinemaHallType = 3,
                             CinemaId = 3,
-                            Currency = "",
                             Price = 450m
                         },
                         new
                         {
                             Id = 8,
-                            CinemaHallType = "TwoDimensions",
+                            CinemaHallType = 1,
                             CinemaId = 4,
-                            Currency = "",
                             Price = 250m
                         });
                 });
@@ -336,16 +321,16 @@ namespace EFCoreMovies.Migrations
                             Id = 1,
                             CinemaId = 1,
                             DiscountPercentage = 10m,
-                            EndDate = new DateTime(2023, 7, 31, 0, 0, 0, 0, DateTimeKind.Local),
-                            StartDate = new DateTime(2023, 7, 24, 0, 0, 0, 0, DateTimeKind.Local)
+                            EndDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 5, 0, 0, 0, 0, DateTimeKind.Local)
                         },
                         new
                         {
                             Id = 2,
                             CinemaId = 4,
                             DiscountPercentage = 15m,
-                            EndDate = new DateTime(2023, 7, 29, 0, 0, 0, 0, DateTimeKind.Local),
-                            StartDate = new DateTime(2023, 7, 24, 0, 0, 0, 0, DateTimeKind.Local)
+                            EndDate = new DateTime(2023, 7, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 5, 0, 0, 0, 0, DateTimeKind.Local)
                         });
                 });
 
@@ -366,10 +351,6 @@ namespace EFCoreMovies.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("IsDeleted = 'false'");
 
                     b.ToTable("Genres");
 
@@ -404,19 +385,6 @@ namespace EFCoreMovies.Migrations
                             IsDeleted = false,
                             Name = "Drama"
                         });
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.Log", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("EFCoreMovies.Entities.Movie", b =>
@@ -561,43 +529,6 @@ namespace EFCoreMovies.Migrations
                             Character = "Neo",
                             Order = 1
                         });
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.NotKeys.CinemaWithNotLocation", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView(null, (string)null);
-
-                    b.ToSqlQuery("Select Id, Name from Cinemas");
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.NotKeys.MovieWithQuantities", b =>
-                {
-                    b.Property<int>("ActorsQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CinemasQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GenresQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("CountMoviesView", (string)null);
                 });
 
             modelBuilder.Entity("GenreMovie", b =>

@@ -4,6 +4,7 @@ using EFCoreMovies.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace EFCoreMovies.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230713021724_AddViewFromDatabase")]
+    partial class AddViewFromDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,11 +96,6 @@ namespace EFCoreMovies.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("PictureURL")
-                        .HasMaxLength(500)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
 
                     b.HasKey("Id");
 
@@ -336,16 +334,16 @@ namespace EFCoreMovies.Migrations
                             Id = 1,
                             CinemaId = 1,
                             DiscountPercentage = 10m,
-                            EndDate = new DateTime(2023, 7, 31, 0, 0, 0, 0, DateTimeKind.Local),
-                            StartDate = new DateTime(2023, 7, 24, 0, 0, 0, 0, DateTimeKind.Local)
+                            EndDate = new DateTime(2023, 7, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local)
                         },
                         new
                         {
                             Id = 2,
                             CinemaId = 4,
                             DiscountPercentage = 15m,
-                            EndDate = new DateTime(2023, 7, 29, 0, 0, 0, 0, DateTimeKind.Local),
-                            StartDate = new DateTime(2023, 7, 24, 0, 0, 0, 0, DateTimeKind.Local)
+                            EndDate = new DateTime(2023, 7, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartDate = new DateTime(2023, 7, 12, 0, 0, 0, 0, DateTimeKind.Local)
                         });
                 });
 
@@ -576,28 +574,6 @@ namespace EFCoreMovies.Migrations
                     b.ToView(null, (string)null);
 
                     b.ToSqlQuery("Select Id, Name from Cinemas");
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.NotKeys.MovieWithQuantities", b =>
-                {
-                    b.Property<int>("ActorsQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CinemasQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GenresQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("CountMoviesView", (string)null);
                 });
 
             modelBuilder.Entity("GenreMovie", b =>

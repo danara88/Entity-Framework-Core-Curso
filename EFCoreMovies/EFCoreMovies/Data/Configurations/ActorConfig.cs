@@ -16,6 +16,15 @@ namespace EFCoreMovies.Data.Configurations
               .IsRequired();
             //modelBuilder.Entity<Actor>().Property(prop => prop.Birthdate)
             //    .HasColumnType("date");
+
+            // Mapeo flexible
+            builder.Property(prop => prop.Name).HasField("_name");
+
+            // Ignorando una propiedad de una entidad
+            // builder.Ignore(prop => prop.Age);
+
+            // Ignorando una clase completa
+            // builder.Ignore(prop => prop.Direction);
         }
     }
 }

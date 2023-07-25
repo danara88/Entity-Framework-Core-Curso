@@ -2,6 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using EFCoreMovies.Data;
 using EFCoreMovies.DTOs;
+using EFCoreMovies.Entities;
+using EFCoreMovies.Entities.NotKeys;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +41,12 @@ namespace EFCoreMovies.Controllers
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        [HttpGet("MoviesWithQuantities")]
+        public async Task<IActionResult> GetMoviesWithQuantities()
+        {
+            return Ok(await _context.Set<MovieWithQuantities>().ToListAsync());
         }
 
         [HttpGet("{id:int}")]
@@ -189,6 +197,33 @@ namespace EFCoreMovies.Controllers
             var movies = await moviesQueryable.Include(m => m.Genres).ToListAsync(); // Ejecutar la query
 
             return Ok(_mapper.Map<List<MovieDTO>>(movies));
+        }
+        
+        [HttpPost("createDtoWithExistingRelatedData")]
+        public async Task<IActionResult> Post(CreateMovieDTO createMovieDTO)
+        {
+            var movie = _mapper.Map<Movie>(createMovieDTO);
+
+            // Los generos que pase por el body, ya existen. Solo los quiero agregar como una relacion.
+            // Pero yo no quiero crear nuevos generos o modificarlos.
+            // Unchanged EF Core los va a ignorar, no los va a crear o modificar. pero lo que si hará es
+            // agregar la relacion.
+            movie.Genres.ForEach(g => _context.Entry(g).State = EntityState.Unchanged);
+
+            movie.CinemaHalls.ForEach(c => _context.Entry(c).State = EntityState.Unchanged);
+
+            if (movie.MoviesActors is not null)
+            {
+                for (int i = 0; i < movie.MoviesActors.Count; i++)
+                {
+                    movie.MoviesActors[i].Order = i + 1;
+                }
+            }
+
+            _context.Add(movie);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

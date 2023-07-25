@@ -17,6 +17,18 @@ namespace EFCoreMovies.Data.Configurations
                 // .HasColumnName("NombreGenero")
                 .HasMaxLength(150)
                 .IsRequired();
+
+            // Este es un filtro a nivel de modelo
+            builder.HasQueryFilter(prop => !prop.IsDeleted); // Para utilizar el borrado logico
+
+            builder.HasIndex(prop => prop.Name)
+                .HasFilter("IsDeleted = 'false'")
+                .IsUnique(); // Crea un indice para Name
+
+            // Configurando una propiedad sombra
+            //builder.Property<DateTime>("CreatedOnShadow")
+            //    .HasDefaultValueSql("GetDate()")
+            //    .HasColumnType("datetime2");
         }
     }
 }

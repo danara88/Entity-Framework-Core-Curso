@@ -40,11 +40,11 @@
         /// <summary>
         /// Cinema halls hash set
         /// </summary>
-        public HashSet<CinemaHall> CinemaHalls { get; set; }
+        public List<CinemaHall> CinemaHalls { get; set; }
 
         /// <summary>
         /// Movies Actors navigation property
         /// </summary>
-        public HashSet<MovieActor> MoviesActors { get; set; }
+        public List<MovieActor> MoviesActors { get; set; }
     }
 }
